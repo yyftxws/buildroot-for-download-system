@@ -2,7 +2,7 @@
 # the context of 'make release'
 .PHONY: asciidoc-check-dependencies
 asciidoc-check-dependencies:
-	$(Q)if [ -z "$(shell support/dependencies/check-host-asciidoc.sh)" ]; then \
+	$(Q)if [ -z "$(shell $(TOOLSDIR)/support/dependencies/check-host-asciidoc.sh)" ]; then \
 		echo "You need a sufficiently recent asciidoc on your host" \
 			"to generate documents"; \
 		exit 1; \

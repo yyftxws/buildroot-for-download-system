@@ -25,6 +25,7 @@ $(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
 
 
 BUILD_DIR := $(BASE_DIR)/build
+HOST_DIR := $(BASE_DIR)/host
 
 BR2_CONFIG = $(TOOLSDIR)/config.mk
 # Pull in the user's configuration file
