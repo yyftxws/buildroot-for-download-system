@@ -20,4 +20,5 @@ BR2_XZCAT="xzcat"
 BR2_LZCAT="lzip -d -c"
 BR2_TAR_OPTIONS=""
 BR2_DL_DIR="$(TOPDIR)/dl"
+TAR ?= tar
 

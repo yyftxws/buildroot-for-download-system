@@ -70,11 +70,13 @@ export BUILD_DIR
 include $(TOOLSDIR)/package/pkg-download.mk
 #include $(TOOLSDIR)/package/pkg-autotools.mk
 include $(TOOLSDIR)/package/pkg-generic.mk
-include $(TOOLSDIR)/support/dependencies/dependencies.mk
+#include $(TOOLSDIR)/support/dependencies/dependencies.mk
 
 include $(sort $(wildcard package/*/*.mk))
 
 .PHONY: prepare
 prepare:
 #	echo "================"
+
+.PHONY: dependencies
 
