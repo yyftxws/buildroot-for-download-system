@@ -23,9 +23,13 @@ endif
 BASE_DIR := $(CANONICAL_O)
 $(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
 
-
+BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(PATH)"
 BUILD_DIR := $(BASE_DIR)/build
 HOST_DIR := $(BASE_DIR)/host
+TARGET_DIR := $(BASE_DIR)/target
+BINARIES_DIR := $(BASE_DIR)/images
+STAGING_DIR = $(BASE_DIR)/staging
+APPLY_PATCHES = PATH=$(HOST_DIR)/bin:$$PATH $(TOOLSDIR)/support/scripts/apply-patches.sh $(if $(QUIET),-s)
 
 BR2_CONFIG = $(TOOLSDIR)/config.mk
 # Pull in the user's configuration file
@@ -43,26 +47,29 @@ TAR_OPTIONS = $(call qstrip,$(BR2_TAR_OPTIONS)) -xf
 include $(TOOLSDIR)/package/pkg-utils.mk
 include $(TOOLSDIR)/package/doc-asciidoc.mk
 
-BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(PATH)"
 
 export BR2_CONFIG
 #export BR2_REPRODUCIBLE
-#export TARGET_DIR
-#export STAGING_DIR
+export TARGET_DIR
+export STAGING_DIR
 #export HOST_DIR
-#export BINARIES_DIR
+export BINARIES_DIR
 export BASE_DIR
 export TOOLSDIR
+export BUILD_DIR
 
 # Include legacy before the other things, because package .mk files
 # may rely on it.
-include Makefile.legacy
+#include Makefile.legacy
 
 #include system/system.mk
-include $(TOOLSDIR)/package/Makefile.in
+#include $(TOOLSDIR)/package/Makefile.in
 # arch/arch.mk must be after package/Makefile.in because it may need to
 # complement variables defined therein, like BR_NO_CHECK_HASH_FOR.
 #include arch/arch.mk
+include $(TOOLSDIR)/package/pkg-download.mk
+#include $(TOOLSDIR)/package/pkg-autotools.mk
+include $(TOOLSDIR)/package/pkg-generic.mk
 include $(TOOLSDIR)/support/dependencies/dependencies.mk
 
 include $(sort $(wildcard package/*/*.mk))

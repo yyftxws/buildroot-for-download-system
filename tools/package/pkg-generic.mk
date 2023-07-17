@@ -273,12 +273,12 @@ $(BUILD_DIR)/%/.stamp_configured:
 	@$(call step_start,configure)
 	@$(call MESSAGE,"Configuring")
 	$(Q)mkdir -p $(HOST_DIR) $(TARGET_DIR) $(STAGING_DIR) $(BINARIES_DIR)
-#	$(call prepare-per-package-directory,$($(PKG)_FINAL_DEPENDENCIES))
+	$(call prepare-per-package-directory,$($(PKG)_FINAL_DEPENDENCIES))
 	$(foreach hook,$($(PKG)_POST_PREPARE_HOOKS),$(call $(hook))$(sep))
-#	@$(call pkg_size_before,$(TARGET_DIR))
-#	@$(call pkg_size_before,$(STAGING_DIR),-staging)
-#	@$(call pkg_size_before,$(BINARIES_DIR),-images)
-#	@$(call pkg_size_before,$(HOST_DIR),-host)
+	@$(call pkg_size_before,$(TARGET_DIR))
+	@$(call pkg_size_before,$(STAGING_DIR),-staging)
+	@$(call pkg_size_before,$(BINARIES_DIR),-images)
+	@$(call pkg_size_before,$(HOST_DIR),-host)
 	$(foreach hook,$($(PKG)_PRE_CONFIGURE_HOOKS),$(call $(hook))$(sep))
 	$($(PKG)_CONFIGURE_CMDS)
 	$(foreach hook,$($(PKG)_POST_CONFIGURE_HOOKS),$(call $(hook))$(sep))
@@ -378,31 +378,31 @@ $(BUILD_DIR)/%/.stamp_images_installed:
 
 # Install to target dir
 $(BUILD_DIR)/%/.stamp_target_installed:
-#	@$(call step_start,install-target)
+	@$(call step_start,install-target)
 	@$(call MESSAGE,"Installing to target")
 	$(foreach hook,$($(PKG)_PRE_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
 	+$($(PKG)_INSTALL_TARGET_CMDS)
-#	$(if $(BR2_INIT_SYSTEMD),\
-#		$($(PKG)_INSTALL_INIT_SYSTEMD))
-#	$(if $(BR2_INIT_SYSV)$(BR2_INIT_BUSYBOX),\
-#		$($(PKG)_INSTALL_INIT_SYSV))
-#	$(if $(BR2_INIT_OPENRC), \
-#		$(or $($(PKG)_INSTALL_INIT_OPENRC), \
-#			$($(PKG)_INSTALL_INIT_SYSV)))
-#	$(foreach hook,$($(PKG)_POST_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
-#	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
-#		$(RM) -f $(addprefix $(TARGET_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ; \
-#	fi
-#	@$(call step_end,install-target)
+	$(if $(BR2_INIT_SYSTEMD),\
+		$($(PKG)_INSTALL_INIT_SYSTEMD))
+	$(if $(BR2_INIT_SYSV)$(BR2_INIT_BUSYBOX),\
+		$($(PKG)_INSTALL_INIT_SYSV))
+	$(if $(BR2_INIT_OPENRC), \
+		$(or $($(PKG)_INSTALL_INIT_OPENRC), \
+			$($(PKG)_INSTALL_INIT_SYSV)))
+	$(foreach hook,$($(PKG)_POST_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
+	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
+		$(RM) -f $(addprefix $(TARGET_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ; \
+	fi
+	@$(call step_end,install-target)
 	$(Q)touch $@
 
 # Final installation step, completed when all installation steps
 # (host, images, staging, target) have completed
 $(BUILD_DIR)/%/.stamp_installed:
-#	@$(call pkg_size_after,$(TARGET_DIR))
-#	@$(call pkg_size_after,$(STAGING_DIR),-staging)
-#	@$(call pkg_size_after,$(BINARIES_DIR),-images)
-#	@$(call pkg_size_after,$(HOST_DIR),-host)
+	@$(call pkg_size_after,$(TARGET_DIR))
+	@$(call pkg_size_after,$(STAGING_DIR),-staging)
+	@$(call pkg_size_after,$(BINARIES_DIR),-images)
+	@$(call pkg_size_after,$(HOST_DIR),-host)
 #	@$(call check_bin_arch)
 	$(Q)touch $@
 
